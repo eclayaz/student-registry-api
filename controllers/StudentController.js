@@ -13,20 +13,33 @@ function StudentData(data) {
 /**
  * @returns {Object}
  */
-exports.studentList = function (req, res) {
+exports.studentList = async function (req, res) {
   const resPerPage = 3;
   const page = req.query.page || 1;
 
   try {
-    Student.find()
+    const students = await Student.find(
+      {},
+      "_id name gender address contactNumber"
+    )
       .skip(resPerPage * page - resPerPage)
-      .limit(resPerPage)
-      .then((students) => {
-        return apiResponse.successResponseWithData(res, "Success", students);
-      });
+      .limit(resPerPage);
+
+    return apiResponse.successResponseWithData(res, "Success", students);
   } catch (err) {
-    //throw error in json response with status 500.
-    return apiResponse.ErrorResponse(res, err);
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+};
+
+/**
+ * @returns {Object}
+ */
+exports.studentDetails = async function (req, res) {
+  try {
+    const student = await Student.findById(req.params.id);
+    return apiResponse.successResponseWithData(res, "Success", student);
+  } catch (err) {
+    return apiResponse.ErrorResponse(res, err.message);
   }
 };
 
@@ -41,6 +54,7 @@ exports.studentStore = function (req, res) {
       gender: req.body.gender,
       address: req.body.address,
       contactNumber: req.body.contactNumber,
+      subjects: req.body.subjects,
     });
 
     if (!errors.isEmpty()) {
