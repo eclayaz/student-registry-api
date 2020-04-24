@@ -36,7 +36,10 @@ exports.studentList = async function (req, res) {
  */
 exports.studentDetails = async function (req, res) {
   try {
-    const student = await Student.findById(req.params.id);
+    const student = await Student.findById(
+      req.params.id,
+      "_id name gender address contactNumber subjects"
+    );
     return apiResponse.successResponseWithData(res, "Success", student);
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);

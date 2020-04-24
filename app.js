@@ -8,6 +8,7 @@ const helmet = require("helmet");
 
 var indexRouter = require("./routes/index");
 var studentRouter = require("./routes/student");
+var subjectRouter = require("./routes/subject");
 
 var MONGODB_URL = "mongodb://localhost:27017:27017/students-app";
 var mongoose = require("mongoose");
@@ -46,5 +47,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/students", studentRouter);
+app.use("/subjects", subjectRouter);
 
 module.exports = app;
