@@ -6,9 +6,9 @@ const Subject = require("../models/SubjectModel");
  */
 exports.subjectList = async function (req, res) {
   try {
-    const subject = await Subject.find({}, "_id name");
+    const subjects = await Subject.find({}, "_id name");
 
-    return apiResponse.successResponseWithData(res, "Success", subject);
+    return apiResponse.successResponseWithData(res, "Success", subjects);
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
   }

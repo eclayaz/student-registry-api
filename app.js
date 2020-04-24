@@ -5,28 +5,14 @@ var logger = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
+require("dotenv").config();
 
-var indexRouter = require("./routes/index");
-var studentRouter = require("./routes/student");
-var subjectRouter = require("./routes/subject");
+const { connectToDB } = require("./database/mongo");
+const indexRouter = require("./routes/index");
+const studentRouter = require("./routes/student");
+const subjectRouter = require("./routes/subject");
 
-var MONGODB_URL = "mongodb://localhost:27017:27017/students-app";
-var mongoose = require("mongoose");
-mongoose
-  .connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    //don't show the log when it is test
-    if (process.env.NODE_ENV !== "test") {
-      console.log("Connected to %s", MONGODB_URL);
-      console.log("App is running ... \n");
-      console.log("Press CTRL + C to stop the process. \n");
-    }
-  })
-  .catch((err) => {
-    console.error("App starting error:", err.message);
-    process.exit(1);
-  });
-var db = mongoose.connection;
+connectToDB();
 
 var app = express();
 

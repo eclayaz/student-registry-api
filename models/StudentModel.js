@@ -7,7 +7,7 @@ var StudentSchema = new Schema({
   gender: { type: String, required: true },
   address: { type: String, required: true },
   contactNumber: { type: Number, required: true },
-  subjects: [{ type: Object, required: false }],
+  subjects: [{ type: String, required: true }],
 });
 
 module.exports = mongoose.model("Student", StudentSchema);
