@@ -6,11 +6,12 @@ exports.successResponse = function (res, msg) {
   return res.status(200).json(data);
 };
 
-exports.successResponseWithData = function (res, msg, data) {
+exports.successResponseWithData = function (res, msg, data, count) {
   var resData = {
     status: 1,
     message: msg,
-    data: data,
+    data,
+    count,
   };
   return res.status(200).json(resData);
 };

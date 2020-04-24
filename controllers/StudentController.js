@@ -14,18 +14,20 @@ function StudentData(data) {
  * @returns {Object}
  */
 exports.studentList = async function (req, res) {
-  const resPerPage = 3;
   const page = req.query.page || 1;
+  const resPerPage = parseInt(req.query.limit) || 10;
 
   try {
     const students = await Student.find(
       {},
-      "_id name gender address contactNumber"
+      "_id name gender address contactNumber subjects"
     )
       .skip(resPerPage * page - resPerPage)
       .limit(resPerPage);
 
-    return apiResponse.successResponseWithData(res, "Success", students);
+    const count = await Student.count({});
+
+    return apiResponse.successResponseWithData(res, "Success", students, count);
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
   }
