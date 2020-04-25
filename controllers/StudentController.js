@@ -3,7 +3,7 @@ const apiResponse = require("../helpers/apiResponse");
 const Student = require("../models/StudentModel");
 
 function StudentData(data) {
-  this.id = data._id;
+  this._id = data._id;
   this.name = data.name;
   this.gender = data.gender;
   this.address = data.address;
