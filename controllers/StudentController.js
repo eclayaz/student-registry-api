@@ -8,6 +8,7 @@ function StudentData(data) {
   this.gender = data.gender;
   this.address = data.address;
   this.contactNumber = data.contactNumber;
+  this.subjects = data.subjects;
 }
 
 /**
@@ -54,6 +55,15 @@ exports.studentDetails = async function (req, res) {
 exports.studentStore = function (req, res) {
   try {
     const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return apiResponse.validationErrorWithData(
+        res,
+        "Validation Error.",
+        errors.array()
+      );
+    }
+
     var student = new Student({
       name: req.body.name,
       gender: req.body.gender,
@@ -62,25 +72,46 @@ exports.studentStore = function (req, res) {
       subjects: req.body.subjects,
     });
 
+    student.save((err) => {
+      if (err) {
+        return apiResponse.ErrorResponse(res, err);
+      }
+      let studentData = new StudentData(student);
+      return apiResponse.successResponseWithData(
+        res,
+        "Student add successfully.",
+        studentData
+      );
+    });
+  } catch (err) {
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+};
+
+exports.enrollSubjects = function (req, res) {
+  try {
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return apiResponse.validationErrorWithData(
         res,
         "Validation Error.",
         errors.array()
       );
-    } else {
-      student.save(function (err) {
+    }
+
+    Student.updateOne(
+      { _id: req.params.id },
+      { subjects: req.body.subjects },
+      (err) => {
         if (err) {
           return apiResponse.ErrorResponse(res, err);
         }
-        let studentData = new StudentData(student);
-        return apiResponse.successResponseWithData(
+        return apiResponse.successResponse(
           res,
-          "Student add successfully.",
-          studentData
+          `Student ${req.params.id} enrolled successfully.`
         );
-      });
-    }
+      }
+    );
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
   }
