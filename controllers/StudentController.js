@@ -2,13 +2,15 @@ const { validationResult } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const Student = require("../models/StudentModel");
 
-function StudentData(data) {
-  this._id = data._id;
-  this.name = data.name;
-  this.gender = data.gender;
-  this.address = data.address;
-  this.contactNumber = data.contactNumber;
-  this.subjects = data.subjects;
+class StudentData {
+  constructor(data) {
+    this._id = data._id;
+    this.name = data.name;
+    this.gender = data.gender;
+    this.address = data.address;
+    this.contactNumber = data.contactNumber;
+    this.subjects = data.subjects;
+  }
 }
 
 /**
