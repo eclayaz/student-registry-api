@@ -19,9 +19,12 @@ exports.studentList = async function (req, res) {
 
     const count = await Student.countDocuments({});
 
-    res.setHeader("Access-Control-Expose-Headers", "*");
-    res.setHeader("X-Total-Count", count);
-    return apiResponse.successResponseWithData(res, "Success", students);
+    return apiResponse.successResponseWithTotalCount(
+      res,
+      "Success",
+      students,
+      count
+    );
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
   }

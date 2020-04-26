@@ -15,6 +15,12 @@ exports.successResponseWithData = function (res, msg, data) {
   return res.status(200).json(resData);
 };
 
+exports.successResponseWithTotalCount = function (res, msg, data, count) {
+  res.setHeader("Access-Control-Expose-Headers", "*");
+  res.setHeader("X-Total-Count", count);
+  return this.successResponseWithData(res, msg, data);
+};
+
 exports.createdResponseWithData = function (res, msg, data) {
   var resData = {
     status: 1,
@@ -30,7 +36,7 @@ exports.ErrorResponse = function (res, msg) {
     message: msg,
   };
   console.log(msg);
-  
+
   return res.status(500).json(data);
 };
 
