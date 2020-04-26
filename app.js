@@ -6,9 +6,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 require("dotenv").config();
-const TestBbHandler = require("./database/TestDbHandler");
 
-const { connectToDB } = require("./database/mongo");
+const TestBbHandler = require("./database/TestDbHandler");
+const { connectToDB } = require("./database/MongoDbHandler");
 const indexRouter = require("./routes/index");
 const studentRouter = require("./routes/student");
 const subjectRouter = require("./routes/subject");
