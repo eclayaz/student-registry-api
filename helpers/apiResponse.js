@@ -29,6 +29,8 @@ exports.ErrorResponse = function (res, msg) {
     status: 0,
     message: msg,
   };
+  console.log(msg);
+  
   return res.status(500).json(data);
 };
 

@@ -2,17 +2,6 @@ const { validationResult } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const Student = require("../models/StudentModel");
 
-class StudentData {
-  constructor(data) {
-    this._id = data._id;
-    this.name = data.name;
-    this.gender = data.gender;
-    this.address = data.address;
-    this.contactNumber = data.contactNumber;
-    this.subjects = data.subjects;
-  }
-}
-
 /**
  * @returns {Object}
  */
@@ -28,7 +17,7 @@ exports.studentList = async function (req, res) {
       .skip(resPerPage * page - resPerPage)
       .limit(resPerPage);
 
-    const count = await Student.count({});
+    const count = await Student.countDocuments({});
 
     res.setHeader("Access-Control-Expose-Headers", "*");
     res.setHeader("X-Total-Count", count);
@@ -67,20 +56,19 @@ exports.studentStore = async function (req, res) {
   }
 
   try {
-    var student = new Student({
+    const student = {
       name: req.body.name,
       gender: req.body.gender,
       address: req.body.address,
       contactNumber: req.body.contactNumber,
       subjects: req.body.subjects,
-    });
+    };
 
-    await student.save();
-    let studentData = new StudentData(student);
+    const newStudent = await Student.create(student);
     return apiResponse.createdResponseWithData(
       res,
       "Student add successfully.",
-      studentData
+      newStudent
     );
   } catch (err) {
     return apiResponse.InvalidPayloadResponse(res, err.message);
