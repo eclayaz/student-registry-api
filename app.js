@@ -6,13 +6,18 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 require("dotenv").config();
+const TestBbHandler = require("./database/TestDbHandler");
 
 const { connectToDB } = require("./database/mongo");
 const indexRouter = require("./routes/index");
 const studentRouter = require("./routes/student");
 const subjectRouter = require("./routes/subject");
 
-connectToDB();
+if (process.env.NODE_ENV === "test") {
+  TestBbHandler.connect();
+} else {
+  connectToDB();
+}
 
 var app = express();
 

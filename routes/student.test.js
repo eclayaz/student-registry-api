@@ -1,6 +1,15 @@
 const supertest = require("supertest");
 const app = require("../app"); // Link to your server file
 const request = supertest(app);
+const TestBbHandler = require("../database/TestDbHandler");
+
+beforeAll(() => {
+  (async () => await TestBbHandler.addData())();
+});
+
+afterAll(() => {
+  (async () => await TestBbHandler.closeDatabase())();
+});
 
 describe("Students GET Endpoints", () => {
   it("should get all students", async () => {
@@ -35,7 +44,6 @@ describe("Students POST Endpoints", () => {
     expect(res.body.data).toHaveProperty("_id");
     expect(res.body.data).toHaveProperty("name", "Nadeesha Dilruwna");
   });
-
   it("student create should throw 422", async () => {
     const res = await request.post("/students").send({
       name: "Nadeesha Dilruwna",
@@ -48,16 +56,20 @@ describe("Students POST Endpoints", () => {
 
 describe("Students PUT Endpoints", () => {
   it("should update students subjects", async () => {
-    const res = await request.put("/students/5ea1dfc56d485cd446b54d90/subjects").send({
-      subjects:["Maths", "English"]
-    });
+    const res = await request
+      .put("/students/5ea1dfc56d485cd446b54d90/subjects")
+      .send({
+        subjects: ["Maths", "English"],
+      });
     expect(res.statusCode).toBe(200);
   });
 
   it("students update should throw 422", async () => {
-    const res = await request.put("/students/5ea1dfc56d485cd446b54d90/subjects").send({
-      subjects:{subjects: ["Maths", "English"]}
-    });
+    const res = await request
+      .put("/students/5ea1dfc56d485cd446b54d90/subjects")
+      .send({
+        subjects: { subjects: ["Maths", "English"] },
+      });
     expect(res.statusCode).toBe(422);
   });
 });
